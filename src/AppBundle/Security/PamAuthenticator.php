@@ -23,6 +23,13 @@ class PamAuthenticator implements SimpleFormAuthenticatorInterface
     {
         $this->rootUsers = $rootUsers;
     }
+
+    /**
+     * @param TokenInterface $token
+     * @param UserProviderInterface $userProvider
+     * @param $providerKey
+     * @return UsernamePasswordToken
+     */
     public function authenticateToken(TokenInterface $token, UserProviderInterface $userProvider, $providerKey)
     {
         if (pam_auth($token->getUsername(), $token->getCredentials())) {
@@ -40,12 +47,24 @@ class PamAuthenticator implements SimpleFormAuthenticatorInterface
         );
     }
 
+    /**
+     * @param TokenInterface $token
+     * @param $providerKey
+     * @return bool
+     */
     public function supportsToken(TokenInterface $token, $providerKey)
     {
         return $token instanceof UsernamePasswordToken
         && $token->getProviderKey() === $providerKey;
     }
 
+    /**
+     * @param Request $request
+     * @param $username
+     * @param $password
+     * @param $providerKey
+     * @return UsernamePasswordToken
+     */
     public function createToken(Request $request, $username, $password, $providerKey)
     {
         return new UsernamePasswordToken($username, $password, $providerKey);

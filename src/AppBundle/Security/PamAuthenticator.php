@@ -13,6 +13,16 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 class PamAuthenticator implements SimpleFormAuthenticatorInterface
 {
+    /** @var  array */
+    protected $rootUsers;
+
+    /**
+     * @param array $rootUsers
+     */
+    public function __construct(array $rootUsers)
+    {
+        $this->rootUsers = $rootUsers;
+    }
     public function authenticateToken(TokenInterface $token, UserProviderInterface $userProvider, $providerKey)
     {
         if (pam_auth($token->getUsername(), $token->getCredentials())) {
@@ -20,7 +30,7 @@ class PamAuthenticator implements SimpleFormAuthenticatorInterface
                 $token->getUsername(),
                 $token->getCredentials(),
                 $providerKey,
-                ['ROLE_USER']
+                in_array($token->getUsername(), $this->rootUsers) ? ['ROLE_USER', 'ROLE_ADMIN'] : ['ROLE_USER']
             );
         }
 

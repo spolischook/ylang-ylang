@@ -6,3 +6,4 @@ parameters:
 services:
     pam_authenticator:
         class: AppBundle\Security\PamAuthenticator
+        arguments: ["%root_users%"]

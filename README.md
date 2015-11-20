@@ -8,6 +8,10 @@ Setting PAM
 -----------
 
 You need to set you server for properly work with PAM.
+First of all, install pam extension:
+```
+pecl install pam
+```
 To have ability login with unix user you need to add php process user (www-data) to group of /etc/shadow (shadow).
 See group owner by typing:
 ```

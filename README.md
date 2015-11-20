@@ -1,4 +1,4 @@
-ylang-ylang
+ylang-ylang [![Build Status](https://travis-ci.org/spolischook/ylang-ylang.svg?branch=master)](https://travis-ci.org/spolischook/ylang-ylang)
 =======
 
 Web application that provides access to web server access logs in a

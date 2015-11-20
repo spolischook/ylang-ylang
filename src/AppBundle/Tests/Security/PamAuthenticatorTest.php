@@ -23,9 +23,9 @@ class PamAuthenticatorTest extends \PHPUnit_Framework_TestCase
     {
         $pamAuthenticatorMock = $this->getPamMock(false);
 
-        $this->assertInstanceOf('Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken', $pamAuthenticatorMock->authenticateToken(
+        $pamAuthenticatorMock->authenticateToken(
             new UsernamePasswordToken('test', 'test', 'main', []), new InMemoryUserProvider(), 'main'
-        ));
+        );
     }
 
     /**

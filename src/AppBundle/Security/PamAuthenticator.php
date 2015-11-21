@@ -68,7 +68,7 @@ class PamAuthenticator implements SimpleFormAuthenticatorInterface
      * @param $password
      * @return bool
      */
-    public function pamAuth($username, $password)
+    protected function pamAuth($username, $password)
     {
         return pam_auth($username, $password);
     }

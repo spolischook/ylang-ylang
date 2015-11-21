@@ -35,7 +35,7 @@ class ImportLogsCommand extends ContainerAwareCommand
 
             if ($handle) {
                 while (($line = fgets($handle)) !== false) {
-                    $logEntity = $parser->parse($line);
+                    $logEntity = $parser->parseLog($line);
 
                     if ($lastLogStamp >= $logEntity->getStamp()) {
                         continue;

@@ -9,7 +9,7 @@ class LogParserTest extends \PHPUnit_Framework_TestCase
     public function testParse()
     {
         $parser = new LogParser();
-        $entity = $parser->parse('127.0.0.1 - - [20/Nov/2015:16:22:39 +0200] "POST /login_check HTTP/1.1" 302 681');
+        $entity = $parser->parseLog('127.0.0.1 - - [20/Nov/2015:16:22:39 +0200] "POST /login_check HTTP/1.1" 302 681');
 
         $this->assertInstanceOf('AppBundle\Entity\Log', $entity);
         $this->assertEquals('127.0.0.1', $entity->getHost());

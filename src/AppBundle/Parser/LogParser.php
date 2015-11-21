@@ -16,7 +16,7 @@ class LogParser extends BaseLogParser
      * @return Log
      * @throws FormatException
      */
-    public function parse($line)
+    public function parseLog($line)
     {
         if (!preg_match($this->pcreFormat, $line, $matches)) {
             throw new FormatException($line);

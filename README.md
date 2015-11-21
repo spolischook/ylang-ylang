@@ -1,4 +1,4 @@
-ylang-ylang [![Build Status](https://travis-ci.org/spolischook/ylang-ylang.svg?branch=master)](https://travis-ci.org/spolischook/ylang-ylang) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/spolischook/ylang-ylang/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/spolischook/ylang-ylang/?branch=master)
+ylang-ylang [![Build Status](https://travis-ci.org/spolischook/ylang-ylang.svg?branch=master)](https://travis-ci.org/spolischook/ylang-ylang) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/spolischook/ylang-ylang/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/spolischook/ylang-ylang/?branch=master) [![Code Coverage](https://scrutinizer-ci.com/g/spolischook/ylang-ylang/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/spolischook/ylang-ylang/?branch=master)
 =======
 
 Web application that provides access to web server access logs in a

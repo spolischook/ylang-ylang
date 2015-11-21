@@ -4,8 +4,8 @@ security:
 
     # http://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
     providers:
-        in_memory:
-            memory: ~
+        posix_user:
+            id: posix_user_provider
 
     firewalls:
         # disables authentication for assets and the profiler, adapt it according to your needs
@@ -16,6 +16,7 @@ security:
         main:
             anonymous: ~
             http_basic: ~
+            provider: posix_user
             simple_form:
                 authenticator: pam_authenticator
                 login_path: login
@@ -25,6 +26,5 @@ security:
                 target: /
 
     access_control:
-        # require ROLE_ADMIN for /admin*
         - { path: ^/admin, roles: ROLE_USER }
         - { path: ^/logout, roles: ROLE_USER }

@@ -7,6 +7,7 @@ use Symfony\Component\Security\Core\Authentication\SimpleFormAuthenticatorInterf
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 class PamAuthenticator implements SimpleFormAuthenticatorInterface
@@ -30,8 +31,19 @@ class PamAuthenticator implements SimpleFormAuthenticatorInterface
      */
     public function authenticateToken(TokenInterface $token, UserProviderInterface $userProvider, $providerKey)
     {
+        try {
+            $user = $userProvider->loadUserByUsername($token->getUsername());
+        } catch (UsernameNotFoundException $e) {
+            throw new AuthenticationException('Invalid username or password');
+        }
+
         if (true === $this->pamAuth($token->getUsername(), $token->getCredentials())) {
-            return $token;
+            return new UsernamePasswordToken(
+                $user,
+                $user->getPassword(),
+                $providerKey,
+                in_array($user->getUsername(), $this->rootUsers) ? ['ROLE_USER', 'ROLE_ADMIN'] : ['ROLE_USER']
+            );
         }
 
         throw new AuthenticationException(
@@ -48,7 +60,7 @@ class PamAuthenticator implements SimpleFormAuthenticatorInterface
     public function supportsToken(TokenInterface $token, $providerKey)
     {
         return $token instanceof UsernamePasswordToken
-        && $token->getProviderKey() === $providerKey;
+            && $token->getProviderKey() === $providerKey;
     }
 
     /**
@@ -60,7 +72,7 @@ class PamAuthenticator implements SimpleFormAuthenticatorInterface
      */
     public function createToken(Request $request, $username, $password, $providerKey)
     {
-        return new UsernamePasswordToken($username, $password, $providerKey, in_array($username, $this->rootUsers) ? ['ROLE_USER', 'ROLE_ADMIN'] : ['ROLE_USER']);
+        return new UsernamePasswordToken($username, $password, $providerKey);
     }
 
     /**

@@ -8,15 +8,6 @@ use Symfony\Component\Security\Core\User\InMemoryUserProvider;
 
 class PamAuthenticatorTest extends \PHPUnit_Framework_TestCase
 {
-    public function testAuthenticateValidToken()
-    {
-        $pamAuthenticatorMock = $this->getPamAuthenticatorMock(true);
-
-        $this->assertInstanceOf('Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken', $pamAuthenticatorMock->authenticateToken(
-            new UsernamePasswordToken('test', 'test', 'main', []), new InMemoryUserProvider(), 'main'
-        ));
-    }
-
     /**
      * @expectedException \Symfony\Component\Security\Core\Exception\AuthenticationException
      */

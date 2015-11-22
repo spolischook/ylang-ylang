@@ -7,6 +7,7 @@ use Symfony\Component\Security\Core\Authentication\SimpleFormAuthenticatorInterf
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
@@ -27,6 +28,8 @@ class PamAuthenticator implements SimpleFormAuthenticatorInterface
      * @param TokenInterface $token
      * @param UserProviderInterface $userProvider
      * @param $providerKey
+     * @throw AuthenticationException
+     * @thorw BadCredentialsException
      * @return UsernamePasswordToken
      */
     public function authenticateToken(TokenInterface $token, UserProviderInterface $userProvider, $providerKey)
@@ -34,7 +37,7 @@ class PamAuthenticator implements SimpleFormAuthenticatorInterface
         try {
             $user = $userProvider->loadUserByUsername($token->getUsername());
         } catch (UsernameNotFoundException $e) {
-            throw new AuthenticationException('Invalid username or password');
+            throw new AuthenticationException(sprintf('Can\'t find user by "%s" username', $token->getUsername()));
         }
 
         if (true === $this->pamAuth($token->getUsername(), $token->getCredentials())) {
@@ -46,7 +49,7 @@ class PamAuthenticator implements SimpleFormAuthenticatorInterface
             );
         }
 
-        throw new AuthenticationException(
+        throw new BadCredentialsException(
             'Bad credentials',
             403
         );

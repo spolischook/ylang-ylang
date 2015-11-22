@@ -11,12 +11,26 @@ class PamAuthenticatorTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \Symfony\Component\Security\Core\Exception\AuthenticationException
      */
-    public function testAuthenticateNotValidToken()
+    public function testAuthenticationException()
     {
         $pamAuthenticatorMock = $this->getPamAuthenticatorMock(false);
 
         $pamAuthenticatorMock->authenticateToken(
             new UsernamePasswordToken('test', 'test', 'main', []), new InMemoryUserProvider(), 'main'
+        );
+    }
+
+    /**
+     * @expectedException \Symfony\Component\Security\Core\Exception\BadCredentialsException
+     */
+    public function testBadCredentialsException()
+    {
+        $pamAuthenticatorMock = $this->getPamAuthenticatorMock(false);
+        $user = [];
+
+        $pamAuthenticatorMock->authenticateToken(
+            new UsernamePasswordToken(
+                'test', 'test', 'main', []), new InMemoryUserProvider(['test' => []]), 'main'
         );
     }
 

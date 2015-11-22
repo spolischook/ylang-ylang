@@ -8,5 +8,3 @@ tools:
 filter:
     paths:
         - src/*
-        - web/*
-        - app/*

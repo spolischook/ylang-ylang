@@ -2,6 +2,8 @@
 
 namespace AppBundle\Entity;
 
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
+
 /**
  * LogRepository
  *
@@ -10,6 +12,16 @@ namespace AppBundle\Entity;
  */
 class LogRepository extends \Doctrine\ORM\EntityRepository
 {
+    /**
+     * @var array
+     */
+    protected $rootUsers;
+
+    /**
+     * @var TokenStorage
+     */
+    protected $tokenStorage;
+
     /**
      * @param string $filePath
      * @return int
@@ -25,6 +37,21 @@ class LogRepository extends \Doctrine\ORM\EntityRepository
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
         $query = $qb->select('l')
+    /**
+     * @param array $rootUsers
+     */
+    public function setRootUsers(array $rootUsers)
+    {
+        $this->rootUsers = $rootUsers;
+    }
+
+    /**
+     * @param TokenStorage $tokenStorage
+     */
+    public function setTokenStorage(TokenStorage $tokenStorage)
+    {
+        $this->tokenStorage = $tokenStorage;
+    }
             ->from($this->_entityName, 'l')
             ->getQuery()
         ;

@@ -2,6 +2,8 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\Form\Dto\LogSearch;
+use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 
 /**
@@ -33,10 +35,57 @@ class LogRepository extends \Doctrine\ORM\EntityRepository
         return $lastLog ? $lastLog->getStamp() : 0;
     }
 
-    public function getLogsQuery()
+    /**
+     * @param LogSearch $logSearch
+     * @return \Doctrine\ORM\Query
+     */
+    public function getLogsSearchQuery(LogSearch $logSearch)
     {
-        $qb = $this->getEntityManager()->createQueryBuilder();
-        $query = $qb->select('l')
+        $qb = $this->getQueryBuilder();
+
+        if ($logSearch->search && false === $logSearch->isRegExp) {
+            $qb
+                ->andWhere('l.request LIKE :search')
+                ->setParameter('search', '%'.$logSearch->search.'%');
+        }
+
+        if ($logSearch->search && true === $logSearch->isRegExp) {
+            $qb
+                ->andWhere('REGEXP(l.request, :search) = true')
+                ->setParameter('search', $logSearch->search);
+        }
+
+        if ($logSearch->files) {
+            $qb
+                ->andWhere('l.filePath IN (:files)')
+                ->setParameter('files', $logSearch->files);
+        }
+
+        if ($logSearch->timeIntervals) {
+            $orX = $qb->expr()->orX();
+
+            foreach ($logSearch->timeIntervals as $dateTimeInterval) {
+                $orX->add($qb->expr()->between( 'l.stamp', $dateTimeInterval->from->getTimestamp(), $dateTimeInterval->to->getTimestamp()));
+            }
+
+            $qb->andWhere($orX);
+        }
+
+        return $qb->getQuery();
+    }
+
+    /**
+     * @return array
+     */
+    public function getUserLogFiles()
+    {
+        $qb = $this->getQueryBuilder()->groupBy('l.filePath');
+
+        $logs = $qb->getQuery()->getResult();
+
+        return array_map(function ($l) { return $l->getFilePath(); }, $logs);
+    }
+
     /**
      * @param array $rootUsers
      */
@@ -52,10 +101,32 @@ class LogRepository extends \Doctrine\ORM\EntityRepository
     {
         $this->tokenStorage = $tokenStorage;
     }
-            ->from($this->_entityName, 'l')
-            ->getQuery()
-        ;
 
-        return $query;
+    /**
+     * @return QueryBuilder
+     */
+    public function getQueryBuilder()
+    {
+        $qb = $this->getEntityManager()
+            ->createQueryBuilder()
+            ->select('l')
+            ->from($this->_entityName, 'l')
+        ;
+        $this->filterByUsername($qb);
+
+        return $qb;
+    }
+
+    /**
+     * @param QueryBuilder $qb
+     */
+    protected function filterByUsername(QueryBuilder $qb)
+    {
+        $username = $this->tokenStorage->getToken()->getUser()->getUsername();
+
+        if (false === in_array($username, $this->rootUsers)) {
+            $qb->where('l.username = :username')
+                ->setParameter('username', $username);
+        }
     }
 }

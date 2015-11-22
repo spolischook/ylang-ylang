@@ -15,7 +15,7 @@ class AdminController extends Controller
     {
         $paginator  = $this->get('knp_paginator');
         $pagination = $paginator->paginate(
-            $this->getDoctrine()->getEntityManager()->getRepository('AppBundle:Log')->getLogsQuery(),
+            $this->getDoctrine()->getManager()->getRepository('AppBundle:Log')->getLogsQuery(),
             $request->query->getInt('page', 1),
             $request->query->getInt('limit', 10)
         );

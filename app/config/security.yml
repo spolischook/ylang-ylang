@@ -2,6 +2,9 @@
 # http://symfony.com/doc/current/book/security.html
 security:
 
+    encoders:
+        AppBundle\Security\User\PosixUser:
+            algorithm: plaintext
     # http://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
     providers:
         posix_user:

@@ -20,4 +20,15 @@ class LogRepository extends \Doctrine\ORM\EntityRepository
 
         return $lastLog ? $lastLog->getStamp() : 0;
     }
+
+    public function getLogsQuery()
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $query = $qb->select('l')
+            ->from($this->_entityName, 'l')
+            ->getQuery()
+        ;
+
+        return $query;
+    }
 }

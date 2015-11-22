@@ -7,42 +7,72 @@
         <h1>Logs <small>List of logs</small></h1>
     </div>
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-9">
             <table class="table">
                 <caption>Optional table caption.</caption>
                 <thead>
                 <tr>
-                    <th>#</th>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Username</th>
+                    <th>#id</th>
+                    <th>Host</th>
+                    <th>Logname</th>
+                    <th>User</th>
+                    <th>Time</th>
+                    <th>Request</th>
+                    <th>Status</th>
+                    <th>Bytes</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <th scope="row">1</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                </tr>
-                <tr>
-                    <th scope="row">2</th>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>@fat</td>
-                </tr>
-                <tr>
-                    <th scope="row">3</th>
-                    <td>Larry</td>
-                    <td>the Bird</td>
-                    <td>@twitter</td>
-                </tr>
+                {% for log in pagination %}
+                    <tr>
+                        <th scope="row">{{ log.id }}</th>
+                        <td>{{ log.host }}</td>
+                        <td>{{ log.logname }}</td>
+                        <td>{{ log.user }}</td>
+                        <td>{{ log.time }}</td>
+                        <td>{{ log.request }}</td>
+                        <td>{{ log.status }}</td>
+                        <td>{{ log.responseBytes }}</td>
+                    </tr>
+                {% endfor %}
                 </tbody>
             </table>
+            <div class="navigation col-md-9">
+                {{ knp_pagination_render(pagination) }}
+            </div>
+            <div class="navigation col-md-2" style="margin-top: 20px; float: right">
+                {% set limit = app.request.query.get('limit')|default(10) %}
+                <select class="form-control" onchange="pager()" id="perPageSelector">
+                    <option {% if limit == 10 %}selected{% endif %} value="10">10</option>
+                    <option {% if limit == 25 %}selected{% endif %} value="25">25</option>
+                    <option {% if limit == 50 %}selected{% endif %} value="50">50</option>
+                    <option {% if limit == 100 %}selected{% endif %} value="100">100</option>
+                </select>
+            </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
             <h2>Filters</h2>
+            {{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge(app.request.query.all|merge({'page': 2 }))) }}
         </div>
     </div>
 </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        function pager(val) {
+            var pager = document.getElementById("perPageSelector"),
+                perpage = pager.options[pager.selectedIndex].value,
+                url = replaceQueryParam('limit', perpage, window.location.search);
+            window.location = window.location.pathname + url;
+        }
+
+        // ToDo: Please replace me
+        function replaceQueryParam(param, newval, search) {
+            var regex = new RegExp("([?;&])" + param + "[^&;]*[;&]?");
+            var query = search.replace(regex, "$1").replace(/&$/, '');
+
+            return (query.length > 2 ? query + "&" : "?") + (newval ? param + "=" + newval : '');
+        }
+    </script>
 {% endblock %}

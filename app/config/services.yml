@@ -10,3 +10,8 @@ services:
 
     posix_user_provider:
         class: AppBundle\Security\User\PosixUserProvider
+    app.form.type.log_search:
+        class: AppBundle\Form\Type\LogSearchType
+        arguments: ["@app.repository.log", "@security.token_storage"]
+        tags:
+            - { name: form.type, alias: log_search_type }

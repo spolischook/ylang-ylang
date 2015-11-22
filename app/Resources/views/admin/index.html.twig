@@ -1,5 +1,13 @@
 {% extends "base.html.twig" %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .date-time-intervals li {
+            list-style-type: none;
+        }
+    </style>
+{% endblock %}
 {% block title %}{{ parent() }} | Dashboard{% endblock %}
 {% block body %}
 <div class="container">
@@ -40,6 +48,7 @@
             <div class="navigation col-md-9">
                 {{ knp_pagination_render(pagination) }}
             </div>
+
             <div class="navigation col-md-2" style="margin-top: 20px; float: right">
                 {% set limit = app.request.query.get('limit')|default(10) %}
                 <select class="form-control" onchange="pager()" id="perPageSelector">
@@ -51,8 +60,21 @@
             </div>
         </div>
         <div class="col-md-3">
-            <h2>Filters</h2>
-            {{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge(app.request.query.all|merge({'page': 2 }))) }}
+            {% if "dev" == app.environment %}
+                {{ dump(form.vars.data) }}
+            {% endif %}
+            {{ form_start(form) }}
+                {{ form_row(form.search) }}
+                {{ form_row(form.isRegExp) }}
+                {{ form_row(form.files) }}
+                <h4>Time intervals</h4>
+                <ul class="date-time-intervals" data-prototype="{{ form_widget(form.timeIntervals.vars.prototype)|e }}">
+                    {# iterate over each existing tag and render its only field: name #}
+                    {% for dateTimeInterval in form.timeIntervals %}
+                        <li>{{ form_row(dateTimeInterval.from) }}{{ form_row(dateTimeInterval.to) }}</li>
+                    {% endfor %}
+                </ul>
+            {{ form_end(form) }}
         </div>
     </div>
 </div>
@@ -73,6 +95,71 @@
             var query = search.replace(regex, "$1").replace(/&$/, '');
 
             return (query.length > 2 ? query + "&" : "?") + (newval ? param + "=" + newval : '');
+        }
+    </script>
+    <script>
+        var $collectionHolder;
+
+        // setup an "add a tag" link
+        var $addTagLink = $('<a href="#" class="add_dateTimeInterval_link">Add a interval</a>');
+        var $newLinkLi = $('<li></li>').append($addTagLink);
+
+        jQuery(document).ready(function() {
+            // Get the ul that holds the collection of tags
+            $collectionHolder = $('ul.date-time-intervals');
+
+            // add a delete link to all of the existing tag form li elements
+            $collectionHolder.find('li').each(function() {
+                addTagFormDeleteLink($(this));
+            });
+
+            // add the "add a tag" anchor and li to the tags ul
+            $collectionHolder.append($newLinkLi);
+
+            // count the current form inputs we have (e.g. 2), use that as the new
+            // index when inserting a new item (e.g. 2)
+            $collectionHolder.data('index', $collectionHolder.find(':input').length);
+
+            $addTagLink.on('click', function(e) {
+                // prevent the link from creating a "#" on the URL
+                e.preventDefault();
+
+                // add a new tag form (see next code block)
+                addTagForm($collectionHolder, $newLinkLi);
+            });
+        });
+
+        function addTagForm($collectionHolder, $newLinkLi) {
+            // Get the data-prototype explained earlier
+            var prototype = $collectionHolder.data('prototype');
+
+            // get the new index
+            var index = $collectionHolder.data('index');
+
+            // Replace '__name__' in the prototype's HTML to
+            // instead be a number based on how many items we have
+            var newForm = prototype.replace(/__name__/g, index);
+
+            // increase the index with one for the next item
+            $collectionHolder.data('index', index + 1);
+
+            // Display the form in the page in an li, before the "Add a tag" link li
+            var $newFormLi = $('<li></li>').append(newForm);
+            $newLinkLi.before($newFormLi);
+            addTagFormDeleteLink($newFormLi);
+        }
+
+        function addTagFormDeleteLink($tagFormLi) {
+            var $removeFormA = $('<a href="#">X delete this time interval</a>');
+            $tagFormLi.append($removeFormA);
+
+            $removeFormA.on('click', function(e) {
+                // prevent the link from creating a "#" on the URL
+                e.preventDefault();
+
+                // remove the li for the tag form
+                $tagFormLi.remove();
+            });
         }
     </script>
 {% endblock %}

@@ -3,10 +3,12 @@
 namespace AppBundle\Command;
 
 use AppBundle\Parser\LogParser;
+use Psr\Log\InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 
 class ImportLogsCommand extends ContainerAwareCommand
 {
@@ -29,7 +31,13 @@ class ImportLogsCommand extends ContainerAwareCommand
         $parser = new LogParser();
         $em = $this->getContainer()->get('doctrine.orm.entity_manager');
 
-        foreach ($this->getUserLogFiles($username) as $file) {
+        $logDir = $this->getUserLogDir($username);
+
+        if (false === scandir($logDir)) {
+            throw new InvalidArgumentException(sprintf('"%s" directory does not exists', $logDir));
+        }
+
+        foreach ($this->getFiles($logDir) as $file) {
             $handle = @fopen($file, "r");
             $lastLogStamp = $em->getRepository('AppBundle:Log')->getLastStamp($file);
 
@@ -59,18 +67,18 @@ class ImportLogsCommand extends ContainerAwareCommand
 
     /**
      * @param string $username
-     * @return array
-     * @throws \Exception
+     * @throw UsernameNotFoundException
+     * @return string
      */
-    protected function getUserLogFiles($username)
+    protected function getUserLogDir($username)
     {
-        $dir = '/home/'.$username.'/logs';
-
-        if (false === scandir($dir)) {
-            throw new \Exception(sprintf('"%s" directory does not exists'));
+        if (false === $userinfo = posix_getpwnam($username)) {
+            throw new UsernameNotFoundException();
         }
 
-        return $this->getFiles($dir);
+        $homeDir = $userinfo['dir'];
+
+        return $homeDir.'/logs';
     }
 
     /**

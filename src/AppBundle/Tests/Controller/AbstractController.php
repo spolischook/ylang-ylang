@@ -56,7 +56,6 @@ abstract class AbstractController extends WebTestCase
         $client = $this->getClient();
 
         $crawler = $client->request($method, $path);
-        var_dump($crawler->html());
         $this->assertEquals(
             $expectedStatusCode,
             $client->getResponse()->getStatusCode(),

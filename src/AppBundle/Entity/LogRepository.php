@@ -43,25 +43,23 @@ class LogRepository extends \Doctrine\ORM\EntityRepository
     {
         $qb = $this->getQueryBuilder();
 
-        if ($logSearch->search && false === $logSearch->isRegExp) {
-            $qb
-                ->andWhere('l.request LIKE :search')
-                ->setParameter('search', '%'.$logSearch->search.'%');
+        if ($logSearch->search) {
+            if (true === $logSearch->isRegExp) {
+                $qb->andWhere('REGEXP(l.request, :search) = true');
+            } else {
+                $qb->andWhere('l.request LIKE :search');
+            }
+
+            $qb->setParameter('search', '%'.$logSearch->search.'%');
         }
 
-        if ($logSearch->search && true === $logSearch->isRegExp) {
-            $qb
-                ->andWhere('REGEXP(l.request, :search) = true')
-                ->setParameter('search', $logSearch->search);
-        }
-
-        if ($logSearch->files) {
+        if (!empty($logSearch->files)) {
             $qb
                 ->andWhere('l.filePath IN (:files)')
                 ->setParameter('files', $logSearch->files);
         }
 
-        if ($logSearch->timeIntervals) {
+        if (!empty($logSearch->timeIntervals)) {
             $orX = $qb->expr()->orX();
 
             foreach ($logSearch->timeIntervals as $dateTimeInterval) {

@@ -29,4 +29,10 @@ class LogSearch
      * @Assert\Type(type="array")
      */
     public $timeIntervals;
+
+    /**
+     * @var array
+     * @Assert\Type(type="array")
+     */
+    public $users;
 }

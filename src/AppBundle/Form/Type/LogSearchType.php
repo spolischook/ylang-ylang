@@ -20,15 +20,22 @@ class LogSearchType extends AbstractType
      */
     protected $tokenStorage;
 
-    public function __construct(LogRepository $logRepository, TokenStorage $tokenStorage)
+    /**
+     * @var array
+     */
+    protected $rootUsers;
+
+    public function __construct(LogRepository $logRepository, TokenStorage $tokenStorage, array $rootUsers)
     {
         $this->logRepository = $logRepository;
         $this->tokenStorage  = $tokenStorage;
+        $this->rootUsers     = $rootUsers;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $logFiles = $this->logRepository->getUserLogFiles();
+        $users    = $this->logRepository->getUsers();
 
         $builder
             ->add('search', 'search', ['required' => false])
@@ -37,14 +44,24 @@ class LogSearchType extends AbstractType
                 'multiple' => true,
                 'required' => false,
                 'choices'  => array_combine($logFiles, $logFiles),
-                'choices_as_values' => true,
             ])
             ->add('timeIntervals', 'collection', [
                 'allow_add'    => true,
                 'allow_delete' => true,
                 'type'         => new DateTimeIntervalType(),
             ])
-            ->add('filter', 'submit')
+        ;
+
+        if (true === in_array($this->tokenStorage->getToken()->getUser()->getUsername(), $this->rootUsers)) {
+            $builder->add('users', 'choice', [
+                'multiple' => true,
+                'required' => false,
+                'choices'  => array_combine($users, $users),
+                'choices_as_values' => true,
+            ]);
+        }
+
+        $builder->add('filter', 'submit')
         ;
     }
 

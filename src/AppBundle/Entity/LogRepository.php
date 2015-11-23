@@ -87,6 +87,18 @@ class LogRepository extends \Doctrine\ORM\EntityRepository
     }
 
     /**
+     * @return array
+     */
+    public function getUsers()
+    {
+        $qb = $this->getQueryBuilder()->groupBy('l.username');
+
+        $users = $qb->getQuery()->getResult();
+
+        return array_map(function ($l) { return $l->getUsername(); }, $users);
+    }
+
+    /**
      * @param array $rootUsers
      */
     public function setRootUsers(array $rootUsers)

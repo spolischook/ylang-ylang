@@ -18,3 +18,12 @@ See group owner by typing:
 ls -l /etc/shadow
 ```
 see more about this - http://svn.php.net/viewvc/pecl/pam/trunk/README?view=markup#l85
+
+What inside
+-----------
+
+You need to login as Unix* user with your username and password
+
+At admin you can see your user logs.
+Filter it.
+If you ara one of admin users (setted in parameters.yml) you can see all logs for all users, and filter logs by user 

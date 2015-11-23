@@ -89,7 +89,7 @@ class ImportLogsCommand extends ContainerAwareCommand
     protected function getFiles($dir, array &$files = [])
     {
         foreach (scandir($dir) as $file) {
-            if (in_array($file, [".",".."])) {
+            if (in_array($file, [".", ".."])) {
                 continue;
             }
 

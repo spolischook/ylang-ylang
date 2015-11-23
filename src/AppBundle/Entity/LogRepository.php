@@ -63,7 +63,7 @@ class LogRepository extends \Doctrine\ORM\EntityRepository
             $orX = $qb->expr()->orX();
 
             foreach ($logSearch->timeIntervals as $dateTimeInterval) {
-                $orX->add($qb->expr()->between( 'l.stamp', $dateTimeInterval->from->getTimestamp(), $dateTimeInterval->to->getTimestamp()));
+                $orX->add($qb->expr()->between('l.stamp', $dateTimeInterval->from->getTimestamp(), $dateTimeInterval->to->getTimestamp()));
             }
 
             $qb->andWhere($orX);
@@ -81,7 +81,7 @@ class LogRepository extends \Doctrine\ORM\EntityRepository
 
         $logs = $qb->getQuery()->getResult();
 
-        return array_map(function ($l) { return $l->getFilePath(); }, $logs);
+        return array_map(function($l) { return $l->getFilePath(); }, $logs);
     }
 
     /**
@@ -93,7 +93,7 @@ class LogRepository extends \Doctrine\ORM\EntityRepository
 
         $users = $qb->getQuery()->getResult();
 
-        return array_map(function ($l) { return $l->getUsername(); }, $users);
+        return array_map(function($l) { return $l->getUsername(); }, $users);
     }
 
     /**

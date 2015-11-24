@@ -7,7 +7,13 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Log
  *
- * @ORM\Table()
+ * @ORM\Table(indexes={
+ *  @ORM\Index(name="user", columns={"username"}),
+ *  @ORM\Index(name="stamp", columns={"stamp"}),
+ *  @ORM\Index(name="filePath", columns={"filePath"}),
+ *  @ORM\Index(name="request", columns={"request"}),
+ *  @ORM\Index(name="stamp_request", columns={"stamp", "request"}),
+ * })
  * @ORM\Entity(repositoryClass="AppBundle\Entity\LogRepository")
  */
 class Log
@@ -59,7 +65,7 @@ class Log
     /**
      * @var string
      *
-     * @ORM\Column(name="request", type="text")
+     * @ORM\Column(name="request", type="string", length=8192)
      */
     private $request;
 
@@ -87,7 +93,7 @@ class Log
     /**
      * @var string
      *
-     * @ORM\Column(name="filePath", type="text")
+     * @ORM\Column(name="filePath", type="string", length=1024)
      */
     private $filePath;
 

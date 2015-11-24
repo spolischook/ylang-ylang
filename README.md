@@ -26,7 +26,7 @@ You need to login as Unix* user with your username and password
 
 At admin you can see your user logs.
 Filter it.
-If you ara one of admin users (setted in parameters.yml) you can see all logs for all users, and filter logs by user
+If you are one of admin users (setted in parameters.yml) you can see all logs for all users, and filter logs by user
 
 Time track
 ----------

@@ -47,10 +47,10 @@ class LogRepository extends \Doctrine\ORM\EntityRepository
             if (true === $logSearch->isRegExp) {
                 $qb->andWhere('REGEXP(l.request, :search) = true');
             } else {
-                $qb->andWhere('l.request LIKE :search');
+                $qb->andWhere('l.request LIKE %:search%');
             }
 
-            $qb->setParameter('search', '%'.$logSearch->search.'%');
+            $qb->setParameter('search', $logSearch->search);
         }
 
         if (!empty($logSearch->files)) {

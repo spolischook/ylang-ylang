@@ -6,8 +6,7 @@ before_script:
     - pecl install pam
     - composer self-update
     - composer install
-    - php app/console doctrine:database:create
-    - php app/console doctrine:schema:create
+    - sh bin/reload.sh
 
 script:
   - php bin/phpunit -c app/ --coverage-clover=coverage.clover

@@ -38,28 +38,11 @@ class ImportLogsCommand extends ContainerAwareCommand
         }
 
         foreach ($this->getFiles($logDir) as $file) {
-            $handle = @fopen($file, "r");
             $lastLogStamp = $em->getRepository('AppBundle:Log')->getLastStamp($file);
-
-            if ($handle) {
-                while (($line = fgets($handle)) !== false) {
-                    $logEntity = $parser->parseLog($line);
-
-                    if ($lastLogStamp >= $logEntity->getStamp()) {
-                        continue;
-                    }
-
-                    $logEntity
-                        ->setUsername($username)
-                        ->setFilePath($file);
-
-                    $em->persist($logEntity);
-                }
-                if (!feof($handle)) {
-                    throw new \Exception("Unexpected end of file");
-                }
-                fclose($handle);
-            }
+            $logs = $parser->parseFile($file, $username, $lastLogStamp);
+            array_map(function($log) use ($em) {
+                $em->persist($log);
+            }, $logs);
         }
 
         $em->flush();

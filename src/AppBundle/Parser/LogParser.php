@@ -10,6 +10,43 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
 class LogParser extends BaseLogParser
 {
     /**
+     * @param $fileName
+     * @param $username
+     * @param $lastLogStamp
+     * @return Log[]
+     * @throws FormatException
+     */
+    public function parseFile($fileName, $username, $lastLogStamp = null)
+    {
+        $handle = @fopen($fileName, "r");
+        $logs = [];
+
+        if ($handle) {
+            while (($line = fgets($handle)) !== false) {
+                $logEntity = $this->parseLog($line);
+
+                if ($lastLogStamp >= $logEntity->getStamp()) {
+                    continue;
+                }
+
+                $logEntity
+                    ->setUsername($username)
+                    ->setFilePath($fileName);
+
+                $logs[] = $logEntity;
+            }
+
+            if (!feof($handle)) {
+                throw new FormatException("Unexpected end of file");
+            }
+
+            fclose($handle);
+        }
+
+        return $logs;
+    }
+
+    /**
      * Parses one single log line
      *
      * @param string $line

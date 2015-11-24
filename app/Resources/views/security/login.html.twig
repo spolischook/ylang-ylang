@@ -47,13 +47,15 @@
 {% block title %}{{ parent() }} | Sign in{% endblock %}
 {% block body %}
     <div class="container">
+        {% if "staging" == app.environment %}
+            <div class="alert alert-info" role="alert">
+                <h4>Use below credentials for login</h4>
+                <p>admin:admin</p>
+                <p>user1:user1</p>
+                <p>user2:user2</p>
+            </div>
+        {% endif %}
 
-        <div class="alert alert-info" role="alert">
-            <h4>Use next creadentials for login</h4>
-            <p>admin:admin</p>
-            <p>user1:user1</p>
-            <p>user2:user2</p>
-        </div>
 
         {% if error %}
             <div class="alert alert-danger" role="alert">{{ error.messageKey|trans(error.messageData, 'security') }}</div>

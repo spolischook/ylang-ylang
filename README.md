@@ -32,3 +32,15 @@ Time track
 ----------
 
 ![time](http://i.imgur.com/QhJenEv.png)
+
+ToDo
+----
+
+- Rest Api
+- Add staging env
+- Fix time interval label view
+- Add db indexes
+- Fix per page pagination
+- Add tests for console command
+- Add tests for repository
+- Add functional tests for admin index

@@ -21,4 +21,20 @@ class LogParserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('302', $entity->getStatus());
         $this->assertEquals('681', $entity->getResponseBytes());
     }
+
+    /**
+     * @expectedException \Kassner\LogParser\FormatException
+     */
+    public function testWrongFormat()
+    {
+        $parser = new LogParser();
+        $entity = $parser->parseLog('Wrong format');
+    }
+
+    public function testParseFile()
+    {
+        $parser = new LogParser();
+        $this->assertCount(3, $parser->parseFile(realpath(__DIR__.'/test.log'), 'test'));
+        $this->assertCount(2, $parser->parseFile(realpath(__DIR__.'/test.log'), 'test', 1448118000));
+    }
 }

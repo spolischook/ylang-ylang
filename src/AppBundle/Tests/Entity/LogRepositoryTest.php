@@ -76,12 +76,7 @@ class LogRepositoryTest extends KernelTestCase
             [['', false, [], [], ['user1', 'user2']], 'admin', 79],
             [['POST', false, [], [], []], 'user1', 2],
             [['_wdt/\D?', true, [], [], []], 'user1', 7],
-//            [['', false, [], [], []], 'admin', 1118],
-//            [['', false, [], [], []], 'admin', 1118],
-//            [['', false, [], [], []], 'admin', 1118],
-//            [['', false, [], [], []], 'admin', 1118],
-//            [['', false, [], [], []], 'admin', 1118],
-//            [['', false, [], [], []], 'admin', 1118],
+            [['', false, [], [["20/Nov/2015:16:22:27 +0200", "20/Nov/2015:16:22:32 +0200"]], []], 'user1', 5],
         ];
     }
 
@@ -115,8 +110,8 @@ class LogRepositoryTest extends KernelTestCase
         foreach ($data[3] as $timeIntervalData) {
             $timeInterval = new DateTimeInterval();
 
-            $timeInterval->from = $timeIntervalData[0];
-            $timeInterval->to   = $timeIntervalData[1];
+            $timeInterval->from = new \DateTime($timeIntervalData[0]);
+            $timeInterval->to   = new \DateTime($timeIntervalData[1]);
 
             $logSearch->timeIntervals[] = $timeInterval;
         }

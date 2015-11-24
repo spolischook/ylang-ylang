@@ -11,6 +11,7 @@
         "php": ">=5.6",
         "ext-pam": "*",
         "symfony/symfony": "2.7.*",
+        "twig/twig": "1.23.*",
         "doctrine/orm": "^2.4.8",
         "doctrine/doctrine-bundle": "~1.4",
         "symfony/assetic-bundle": "~2.3",

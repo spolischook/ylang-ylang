@@ -40,6 +40,7 @@ ToDo
 - Add staging env
 - Fix time interval label view
 - Add db indexes
+- Add fixtures with simple reload
 - Fix per page pagination
 - Add tests for console command
 - Add tests for repository

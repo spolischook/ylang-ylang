@@ -28,6 +28,11 @@ At admin you can see your user logs.
 Filter it.
 If you are one of admin users (setted in parameters.yml) you can see all logs for all users, and filter logs by user
 
+Db structure
+------------
+
+![db structure](http://i.imgur.com/gTLxZCF.png)
+
 Time track
 ----------
 

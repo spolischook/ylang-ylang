@@ -59,6 +59,12 @@ class LogRepository extends \Doctrine\ORM\EntityRepository
                 ->setParameter('files', $logSearch->files);
         }
 
+        if (!empty($logSearch->users)) {
+            $qb
+                ->andWhere('l.username IN (:users)')
+                ->setParameter('users', $logSearch->users);
+        }
+
         if (!empty($logSearch->timeIntervals)) {
             $orX = $qb->expr()->orX();
 

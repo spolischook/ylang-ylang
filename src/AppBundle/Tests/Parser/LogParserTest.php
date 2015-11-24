@@ -28,7 +28,7 @@ class LogParserTest extends \PHPUnit_Framework_TestCase
     public function testWrongFormat()
     {
         $parser = new LogParser();
-        $entity = $parser->parseLog('Wrong format');
+        $parser->parseLog('Wrong format');
     }
 
     public function testParseFile()

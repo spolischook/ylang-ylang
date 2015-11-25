@@ -42,7 +42,4 @@ ToDo
 ----
 
 - Rest Api
-- Fix time interval label view
-- Fix per page pagination
-- Add tests for console command
 - Add functional tests for admin index

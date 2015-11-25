@@ -4,15 +4,20 @@ namespace AppBundle\Controller;
 
 use AppBundle\Form\Dto\LogSearch;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * @Route("/admin")
+ */
 class AdminController extends Controller
 {
     const PER_PAGE = 10;
 
     /**
-     * @Route("/admin", name="admin")
+     * @Route("", name="admin")
+     * @Method({"GET"})
      */
     public function indexAction(Request $request)
     {

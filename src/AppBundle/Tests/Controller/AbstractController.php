@@ -88,6 +88,11 @@ abstract class AbstractController extends WebTestCase
         return $this->container;
     }
 
+    /**
+     * @param string $username
+     * @param string $password
+     * @return \Symfony\Bundle\FrameworkBundle\Client
+     */
     protected function logIn($username = 'admin', $password = '111111')
     {
         $client = $this->getClient();

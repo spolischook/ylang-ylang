@@ -10,6 +10,8 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 
 class LogSearchType extends AbstractType
 {
+    const LIMITS = [10, 25, 50, 100];
+
     /**
      * @var LogRepository
      */
@@ -49,6 +51,11 @@ class LogSearchType extends AbstractType
                 'allow_add'    => true,
                 'allow_delete' => true,
                 'type'         => new DateTimeIntervalType(),
+                'label'        => false,
+            ])
+            ->add('limit', 'choice', [
+                'label'   => false,
+                'choices' => array_combine(self::LIMITS, self::LIMITS),
             ])
         ;
 
@@ -61,7 +68,7 @@ class LogSearchType extends AbstractType
             ]);
         }
 
-        $builder->add('filter', 'submit')
+        $builder->add('filter_button', 'submit', ['label' => 'Submit'])
         ;
     }
 

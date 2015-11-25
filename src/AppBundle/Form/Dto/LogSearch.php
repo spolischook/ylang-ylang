@@ -35,4 +35,10 @@ class LogSearch
      * @Assert\Type(type="array")
      */
     public $users;
+
+    /**
+     * @var int
+     * @Assert\Type(type="int")
+     */
+    public $limit;
 }

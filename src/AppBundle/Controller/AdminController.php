@@ -13,8 +13,6 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class AdminController extends Controller
 {
-    const PER_PAGE = 10;
-
     /**
      * @Route("", name="admin")
      * @Method({"GET"})
@@ -36,7 +34,7 @@ class AdminController extends Controller
         $pagination = $paginator->paginate(
             $searchLogQuery,
             $request->query->getInt('page', 1),
-            $request->query->getInt('limit', self::PER_PAGE)
+            $form->getData()->limit ?: 10
         );
 
         return $this->render('admin/index.html.twig', [

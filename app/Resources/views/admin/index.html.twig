@@ -34,6 +34,7 @@
         <h1>Logs <small>List of logs</small></h1>
     </div>
     <div class="row">
+        {{ form_start(form) }}
         <div class="col-md-9">
             <table class="table">
                 <caption>{{ pagination.getTotalItemCount }} items selected</caption>
@@ -69,53 +70,34 @@
             </div>
 
             <div class="navigation col-md-2" style="margin-top: 20px; float: right">
-                {% set limit = app.request.query.get('limit')|default(10) %}
-                <select class="form-control" onchange="pager()" id="perPageSelector">
-                    <option {% if limit == 10 %}selected{% endif %} value="10">10</option>
-                    <option {% if limit == 25 %}selected{% endif %} value="25">25</option>
-                    <option {% if limit == 50 %}selected{% endif %} value="50">50</option>
-                    <option {% if limit == 100 %}selected{% endif %} value="100">100</option>
-                </select>
+                {{ form_row(form.limit, {'attr': {'onchange': 'this.form.submit()'}}) }}
             </div>
         </div>
         <div class="col-md-3">
             {% if "dev" == app.environment %}
                 {{ dump(form.vars.data) }}
             {% endif %}
-            {{ form_start(form) }}
                 {{ form_row(form.search) }}
                 {{ form_row(form.isRegExp) }}
                 {{ form_row(form.files) }}
-                <h4>Time intervals</h4>
+                {% if form.users is defined %}
+                    {{ form_row(form.users) }}
+                {% endif %}
+                {{ form_row(form.filter_button) }}
+                <label class="control-label">Time intervals</label>
                 <ul class="date-time-intervals" data-prototype="{{ form_widget(form.timeIntervals.vars.prototype)|e }}">
                     {# iterate over each existing tag and render its only field: name #}
                     {% for dateTimeInterval in form.timeIntervals %}
                         <li>{{ form_row(dateTimeInterval.from) }}{{ form_row(dateTimeInterval.to) }}</li>
                     {% endfor %}
                 </ul>
-            {{ form_end(form) }}
         </div>
+        {{ form_end(form) }}
     </div>
 </div>
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
-    <script>
-        function pager(val) {
-            var pager = document.getElementById("perPageSelector"),
-                perpage = pager.options[pager.selectedIndex].value,
-                url = replaceQueryParam('limit', perpage, window.location.search);
-            window.location = window.location.pathname + url;
-        }
-
-        // ToDo: Please replace me
-        function replaceQueryParam(param, newval, search) {
-            var regex = new RegExp("([?;&])" + param + "[^&;]*[;&]?");
-            var query = search.replace(regex, "$1").replace(/&$/, '');
-
-            return (query.length > 2 ? query + "&" : "?") + (newval ? param + "=" + newval : '');
-        }
-    </script>
     <script>
         var $collectionHolder;
 

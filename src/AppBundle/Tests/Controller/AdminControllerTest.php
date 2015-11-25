@@ -13,4 +13,13 @@ class AdminControllerTest extends AbstractController
 
         $this->request('/admin', 'GET', 200);
     }
+
+    public function testFormSubmit()
+    {
+        $client = $this->logIn("user1", "user1");
+        $crawler = $client->request('GET', '/admin');
+        $form = $crawler->selectButton('Filter')->form();
+        $client->submit($form);
+        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+    }
 }

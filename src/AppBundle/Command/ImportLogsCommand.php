@@ -31,6 +31,7 @@ class ImportLogsCommand extends ContainerAwareCommand
         $parser = new LogParser();
         $em = $this->getContainer()->get('doctrine.orm.entity_manager');
         $repository = $em->getRepository('AppBundle:Log');
+        $batchSize = 20;
 
         $logDir = $this->getUserLogDir($username);
 
@@ -42,12 +43,19 @@ class ImportLogsCommand extends ContainerAwareCommand
             $output->writeln(sprintf('<info>Importing "%s"</info>', $file));
             $lastLogStamp = $repository->getLastStamp($file);
             $logs = $parser->parseFile($file, $username, $lastLogStamp);
-            array_map(function($log) use ($em) {
-                $em->persist($log);
-            }, $logs);
-        }
 
-        $em->flush();
+            foreach ($logs as $key => $log) {
+                $em->persist($log);
+
+                if (($key % $batchSize) === 0) {
+                    $em->flush();
+                    $em->clear();
+                }
+            }
+
+            $em->flush();
+            $em->clear();
+        }
     }
 
     /**

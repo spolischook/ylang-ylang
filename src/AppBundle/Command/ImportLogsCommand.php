@@ -38,6 +38,7 @@ class ImportLogsCommand extends ContainerAwareCommand
         }
 
         foreach ($this->getFiles($logDir) as $file) {
+            $output->writeln(sprintf('<info>Importing "%s"</info>', $file));
             $lastLogStamp = $em->getRepository('AppBundle:Log')->getLastStamp($file);
             $logs = $parser->parseFile($file, $username, $lastLogStamp);
             array_map(function($log) use ($em) {

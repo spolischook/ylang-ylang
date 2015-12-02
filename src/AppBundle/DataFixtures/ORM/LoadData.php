@@ -23,15 +23,22 @@ class LoadData implements FixtureInterface
     public function load(ObjectManager $manager)
     {
         $parser = new LogParser();
+        $batchSize = 20;
 
         foreach ($this->usersFiles as $file => $user) {
             $logs = $parser->parseFile(realpath($file), $user);
-            array_map(function($log) use ($em) {
-                $em->persist($log);
-            }, $logs);
+
+            foreach ($logs as $key => $log) {
+                $manager->persist($log);
+
+                if (($key % $batchSize) === 0) {
+                    $manager->flush();
+                    $manager->clear();
+                }
+            }
+
+            $manager->flush();
+            $manager->clear();
         }
-
-        $em->flush();
-
     }
 }

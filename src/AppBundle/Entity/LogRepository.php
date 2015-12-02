@@ -83,11 +83,11 @@ class LogRepository extends \Doctrine\ORM\EntityRepository
      */
     public function getUserLogFiles()
     {
-        $qb = $this->getQueryBuilder()->groupBy('l.filePath');
+        $qb = $this->getQueryBuilder('l.filePath')->groupBy('l.filePath');
 
         $logs = $qb->getQuery()->getResult();
 
-        return array_map(function($l) { return $l->getFilePath(); }, $logs);
+        return array_map(function($l) { return $l['filePath']; }, $logs);
     }
 
     /**
@@ -95,11 +95,11 @@ class LogRepository extends \Doctrine\ORM\EntityRepository
      */
     public function getUsers()
     {
-        $qb = $this->getQueryBuilder()->groupBy('l.username');
+        $qb = $this->getQueryBuilder('l.username')->groupBy('l.username');
 
         $users = $qb->getQuery()->getResult();
 
-        return array_map(function($l) { return $l->getUsername(); }, $users);
+        return array_map(function($l) { return $l['username']; }, $users);
     }
 
     /**
@@ -119,13 +119,14 @@ class LogRepository extends \Doctrine\ORM\EntityRepository
     }
 
     /**
+     * @param string $fields
      * @return QueryBuilder
      */
-    public function getQueryBuilder()
+    public function getQueryBuilder($fields = 'l')
     {
         $qb = $this->getEntityManager()
             ->createQueryBuilder()
-            ->select('l')
+            ->select($fields)
             ->from($this->_entityName, 'l')
         ;
         $this->filterByUsername($qb);

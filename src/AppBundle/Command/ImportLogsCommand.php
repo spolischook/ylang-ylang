@@ -33,7 +33,7 @@ class ImportLogsCommand extends ContainerAwareCommand
 
         $logDir = $this->getUserLogDir($username);
 
-        if (false === scandir($logDir)) {
+        if (false === is_dir($logDir)) {
             throw new InvalidArgumentException(sprintf('"%s" directory does not exists', $logDir));
         }
 

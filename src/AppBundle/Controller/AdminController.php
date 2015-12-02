@@ -28,7 +28,7 @@ class AdminController extends Controller
         if ($form->isValid()) {
             $searchLogQuery = $repository->getLogsSearchQuery($form->getData());
         } else {
-            $searchLogQuery = $repository->getQueryBuilder();
+            $searchLogQuery = $repository->getQueryBuilder()->getQuery();
         }
 
         $pagination = $paginator->paginate(

@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Finder\Finder;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 
 class ImportLogsCommand extends ContainerAwareCommand
@@ -39,7 +40,10 @@ class ImportLogsCommand extends ContainerAwareCommand
             throw new InvalidArgumentException(sprintf('"%s" directory does not exists', $logDir));
         }
 
-        foreach ($this->getFiles($logDir) as $file) {
+        $finder = new Finder();
+        $finder->files()->in($logDir);
+
+        foreach ($finder as $file) {
             $output->writeln(sprintf('<info>Importing "%s"</info>', $file));
             $lastLogStamp = $repository->getLastStamp($file);
             $logs = $parser->parseFile($file, $username, $lastLogStamp);
@@ -72,29 +76,5 @@ class ImportLogsCommand extends ContainerAwareCommand
         $homeDir = $userinfo['dir'];
 
         return $homeDir.'/logs';
-    }
-
-    /**
-     * @param $dir
-     * @param array $files
-     * @return array
-     */
-    protected function getFiles($dir, array &$files = [])
-    {
-        foreach (scandir($dir) as $file) {
-            if (in_array($file, [".", ".."])) {
-                continue;
-            }
-
-            $fullPath = $dir.'/'.$file;
-
-            if (is_dir($fullPath)) {
-                $this->getFiles($fullPath, $files);
-            } else {
-                $files[] = $fullPath;
-            }
-        }
-
-        return $files;
     }
 }

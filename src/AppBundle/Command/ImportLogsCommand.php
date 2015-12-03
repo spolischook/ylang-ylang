@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Finder\Finder;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 
 class ImportLogsCommand extends ContainerAwareCommand
@@ -30,22 +31,35 @@ class ImportLogsCommand extends ContainerAwareCommand
         $username = $input->getArgument('username');
         $parser = new LogParser();
         $em = $this->getContainer()->get('doctrine.orm.entity_manager');
+        $repository = $em->getRepository('AppBundle:Log');
+        $batchSize = 20;
 
         $logDir = $this->getUserLogDir($username);
 
-        if (false === scandir($logDir)) {
+        if (false === is_dir($logDir)) {
             throw new InvalidArgumentException(sprintf('"%s" directory does not exists', $logDir));
         }
 
-        foreach ($this->getFiles($logDir) as $file) {
-            $lastLogStamp = $em->getRepository('AppBundle:Log')->getLastStamp($file);
-            $logs = $parser->parseFile($file, $username, $lastLogStamp);
-            array_map(function($log) use ($em) {
-                $em->persist($log);
-            }, $logs);
-        }
+        $finder = new Finder();
+        $finder->files()->in($logDir);
 
-        $em->flush();
+        foreach ($finder as $file) {
+            $output->writeln(sprintf('<info>Importing "%s"</info>', $file));
+            $lastLogStamp = $repository->getLastStamp($file);
+            $logs = $parser->parseFile($file, $username, $lastLogStamp);
+
+            foreach ($logs as $key => $log) {
+                $em->persist($log);
+
+                if (($key % $batchSize) === 0) {
+                    $em->flush();
+                    $em->clear();
+                }
+            }
+
+            $em->flush();
+            $em->clear();
+        }
     }
 
     /**
@@ -62,29 +76,5 @@ class ImportLogsCommand extends ContainerAwareCommand
         $homeDir = $userinfo['dir'];
 
         return $homeDir.'/logs';
-    }
-
-    /**
-     * @param $dir
-     * @param array $files
-     * @return array
-     */
-    protected function getFiles($dir, array &$files = [])
-    {
-        foreach (scandir($dir) as $file) {
-            if (in_array($file, [".", ".."])) {
-                continue;
-            }
-
-            $fullPath = $dir.'/'.$file;
-
-            if (is_dir($fullPath)) {
-                $this->getFiles($fullPath, $files);
-            } else {
-                $files[] = $fullPath;
-            }
-        }
-
-        return $files;
     }
 }

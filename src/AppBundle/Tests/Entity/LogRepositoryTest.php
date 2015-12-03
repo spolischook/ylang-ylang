@@ -2,7 +2,6 @@
 
 namespace AppBundle\Tests\Entity;
 
-use AppBundle\Entity\LogRepository;
 use AppBundle\Form\Dto\DateTimeInterval;
 use AppBundle\Form\Dto\LogSearch;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -18,7 +17,7 @@ class LogRepositoryTest extends KernelTestCase
     private $container;
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function setUp()
     {
@@ -33,9 +32,10 @@ class LogRepositoryTest extends KernelTestCase
 
     /**
      * @dataProvider getSearchData
-     * @param array $logSearchData
+     *
+     * @param array  $logSearchData
      * @param string $currentLoginUser
-     * @param int $resultedLogCount
+     * @param int    $resultedLogCount
      */
     public function testGetLogsSearchQuery(array $logSearchData, $currentLoginUser, $resultedLogCount)
     {
@@ -56,7 +56,7 @@ class LogRepositoryTest extends KernelTestCase
 
     public function testGetLastStamp()
     {
-        $file = realpath(__DIR__."/../../DataFixtures/data/root-access_log");
+        $file = realpath(__DIR__.'/../../DataFixtures/data/root-access_log');
         $date = new \DateTime('23/Nov/2015:02:46:43 +0200');
         $this->assertEquals($date->getTimestamp(), $this->container->get('app.repository.log')->getLastStamp($file));
     }
@@ -68,15 +68,15 @@ class LogRepositoryTest extends KernelTestCase
             [['', false, [], [], []], 'admin', 1118],
             [['', false, [], [], []], 'user1', 41],
             [['', false, [], [], []], 'user2', 38],
-            [['', false, [realpath(__DIR__."/../../DataFixtures/data/root-access_log")], [], []], 'admin', 1039],
-            [['', false, [realpath(__DIR__."/../../DataFixtures/data/root-access_log")], [], []], 'user1', 0],
-            [['', false, [realpath(__DIR__."/../../DataFixtures/data/u1-d1.log"), realpath(__DIR__."/../../DataFixtures/data/u1-d2.log")], [], []], 'user1', 41],
+            [['', false, [realpath(__DIR__.'/../../DataFixtures/data/root-access_log')], [], []], 'admin', 1039],
+            [['', false, [realpath(__DIR__.'/../../DataFixtures/data/root-access_log')], [], []], 'user1', 0],
+            [['', false, [realpath(__DIR__.'/../../DataFixtures/data/u1-d1.log'), realpath(__DIR__.'/../../DataFixtures/data/u1-d2.log')], [], []], 'user1', 41],
             [['', false, [], [], ['user1']], 'admin', 41],
             [['', false, [], [], ['user2']], 'admin', 38],
             [['', false, [], [], ['user1', 'user2']], 'admin', 79],
             [['POST', false, [], [], []], 'user1', 2],
             [['_wdt/\D?', true, [], [], []], 'user1', 7],
-            [['', false, [], [["20/Nov/2015:16:22:27 +0200", "20/Nov/2015:16:22:32 +0200"]], []], 'user1', 5],
+            [['', false, [], [['20/Nov/2015:16:22:27 +0200', '20/Nov/2015:16:22:32 +0200']], []], 'user1', 5],
         ];
     }
 
@@ -97,6 +97,7 @@ class LogRepositoryTest extends KernelTestCase
 
     /**
      * @param array $data
+     *
      * @return LogSearch
      */
     private function getLogSearchDto(array $data)
@@ -111,7 +112,7 @@ class LogRepositoryTest extends KernelTestCase
             $timeInterval = new DateTimeInterval();
 
             $timeInterval->from = new \DateTime($timeIntervalData[0]);
-            $timeInterval->to   = new \DateTime($timeIntervalData[1]);
+            $timeInterval->to = new \DateTime($timeIntervalData[1]);
 
             $logSearch->timeIntervals[] = $timeInterval;
         }

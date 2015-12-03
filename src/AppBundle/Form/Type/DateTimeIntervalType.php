@@ -31,6 +31,6 @@ class DateTimeIntervalType extends AbstractType
      */
     public function getName()
     {
-        return "date_time_interval";
+        return 'date_time_interval';
     }
 }

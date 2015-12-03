@@ -30,14 +30,14 @@ class LogSearchType extends AbstractType
     public function __construct(LogRepository $logRepository, TokenStorage $tokenStorage, array $rootUsers)
     {
         $this->logRepository = $logRepository;
-        $this->tokenStorage  = $tokenStorage;
-        $this->rootUsers     = $rootUsers;
+        $this->tokenStorage = $tokenStorage;
+        $this->rootUsers = $rootUsers;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $logFiles = $this->logRepository->getUserLogFiles();
-        $users    = $this->logRepository->getUsers();
+        $users = $this->logRepository->getUsers();
 
         $builder
             ->add('search', 'search', ['required' => false])
@@ -45,16 +45,16 @@ class LogSearchType extends AbstractType
             ->add('files', 'choice', [
                 'multiple' => true,
                 'required' => false,
-                'choices'  => array_combine($logFiles, $logFiles),
+                'choices' => array_combine($logFiles, $logFiles),
             ])
             ->add('timeIntervals', 'collection', [
-                'allow_add'    => true,
+                'allow_add' => true,
                 'allow_delete' => true,
-                'type'         => new DateTimeIntervalType(),
-                'label'        => false,
+                'type' => new DateTimeIntervalType(),
+                'label' => false,
             ])
             ->add('limit', 'choice', [
-                'label'   => false,
+                'label' => false,
                 'choices' => array_combine(self::LIMITS, self::LIMITS),
             ])
         ;
@@ -63,7 +63,7 @@ class LogSearchType extends AbstractType
             $builder->add('users', 'choice', [
                 'multiple' => true,
                 'required' => false,
-                'choices'  => array_combine($users, $users),
+                'choices' => array_combine($users, $users),
                 'choices_as_values' => true,
             ]);
         }
@@ -86,6 +86,6 @@ class LogSearchType extends AbstractType
      */
     public function getName()
     {
-        return "log_search_type";
+        return 'log_search_type';
     }
 }

@@ -12,12 +12,14 @@ class LogParser extends BaseLogParser
      * @param $fileName
      * @param $username
      * @param $lastLogStamp
+     *
      * @return Log[]
+     *
      * @throws FormatException
      */
     public function parseFile($fileName, $username, $lastLogStamp = null)
     {
-        $handle = @fopen($fileName, "r");
+        $handle = @fopen($fileName, 'r');
         $logs = [];
 
         if ($handle) {
@@ -36,7 +38,7 @@ class LogParser extends BaseLogParser
             }
 
             if (!feof($handle)) {
-                throw new FormatException("Unexpected end of file");
+                throw new FormatException('Unexpected end of file');
             }
 
             fclose($handle);
@@ -46,10 +48,12 @@ class LogParser extends BaseLogParser
     }
 
     /**
-     * Parses one single log line
+     * Parses one single log line.
      *
      * @param string $line
+     *
      * @return Log
+     *
      * @throws FormatException
      */
     public function parseLog($line)

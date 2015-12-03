@@ -65,6 +65,7 @@ class ImportLogsCommand extends ContainerAwareCommand
     /**
      * @param string $username
      * @throw UsernameNotFoundException
+     *
      * @return string
      */
     protected function getUserLogDir($username)

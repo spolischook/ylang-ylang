@@ -5,7 +5,7 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Log
+ * Log.
  *
  * @ORM\Table(indexes={
  *  @ORM\Index(name="user", columns={"username"}),
@@ -19,7 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Log
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -49,7 +49,7 @@ class Log
     private $user;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="stamp", type="integer")
      */
@@ -70,14 +70,14 @@ class Log
     private $request;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="status", type="integer")
      */
     private $status;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="responseBytes", type="integer")
      */
@@ -97,11 +97,10 @@ class Log
      */
     private $filePath;
 
-
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -109,7 +108,7 @@ class Log
     }
 
     /**
-     * Set host
+     * Set host.
      *
      * @param string $host
      *
@@ -123,7 +122,7 @@ class Log
     }
 
     /**
-     * Get host
+     * Get host.
      *
      * @return string
      */
@@ -133,7 +132,7 @@ class Log
     }
 
     /**
-     * Set logname
+     * Set logname.
      *
      * @param string $logname
      *
@@ -147,7 +146,7 @@ class Log
     }
 
     /**
-     * Get logname
+     * Get logname.
      *
      * @return string
      */
@@ -157,7 +156,7 @@ class Log
     }
 
     /**
-     * Set user
+     * Set user.
      *
      * @param string $user
      *
@@ -171,7 +170,7 @@ class Log
     }
 
     /**
-     * Get user
+     * Get user.
      *
      * @return string
      */
@@ -181,9 +180,9 @@ class Log
     }
 
     /**
-     * Set stamp
+     * Set stamp.
      *
-     * @param integer $stamp
+     * @param int $stamp
      *
      * @return Log
      */
@@ -195,9 +194,9 @@ class Log
     }
 
     /**
-     * Get stamp
+     * Get stamp.
      *
-     * @return integer
+     * @return int
      */
     public function getStamp()
     {
@@ -205,7 +204,7 @@ class Log
     }
 
     /**
-     * Set time
+     * Set time.
      *
      * @param string $time
      *
@@ -219,7 +218,7 @@ class Log
     }
 
     /**
-     * Get time
+     * Get time.
      *
      * @return string
      */
@@ -229,7 +228,7 @@ class Log
     }
 
     /**
-     * Set request
+     * Set request.
      *
      * @param string $request
      *
@@ -243,7 +242,7 @@ class Log
     }
 
     /**
-     * Get request
+     * Get request.
      *
      * @return string
      */
@@ -253,9 +252,9 @@ class Log
     }
 
     /**
-     * Set status
+     * Set status.
      *
-     * @param integer $status
+     * @param int $status
      *
      * @return Log
      */
@@ -267,9 +266,9 @@ class Log
     }
 
     /**
-     * Get status
+     * Get status.
      *
-     * @return integer
+     * @return int
      */
     public function getStatus()
     {
@@ -277,9 +276,9 @@ class Log
     }
 
     /**
-     * Set responseBytes
+     * Set responseBytes.
      *
-     * @param integer $responseBytes
+     * @param int $responseBytes
      *
      * @return Log
      */
@@ -291,9 +290,9 @@ class Log
     }
 
     /**
-     * Get responseBytes
+     * Get responseBytes.
      *
-     * @return integer
+     * @return int
      */
     public function getResponseBytes()
     {
@@ -301,7 +300,7 @@ class Log
     }
 
     /**
-     * Set username
+     * Set username.
      *
      * @param string $username
      *
@@ -315,7 +314,7 @@ class Log
     }
 
     /**
-     * Get username
+     * Get username.
      *
      * @return string
      */
@@ -344,4 +343,3 @@ class Log
         return $this;
     }
 }
-

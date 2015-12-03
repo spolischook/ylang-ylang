@@ -22,6 +22,7 @@ class PosixUser implements UserInterface
 
     /**
      * @param string $username
+     *
      * @return PosixUser
      */
     public function setUsername($username)
@@ -41,6 +42,7 @@ class PosixUser implements UserInterface
 
     /**
      * @param string $password
+     *
      * @return PosixUser
      */
     public function setPassword($password)
@@ -60,6 +62,7 @@ class PosixUser implements UserInterface
 
     /**
      * @param string $salt
+     *
      * @return PosixUser
      */
     public function setSalt($salt)
@@ -79,6 +82,7 @@ class PosixUser implements UserInterface
 
     /**
      * @param array $roles
+     *
      * @return PosixUser
      */
     public function setRoles(array $roles)
@@ -109,6 +113,7 @@ class PosixUser implements UserInterface
 
     /**
      * @param string $homeDir
+     *
      * @return PosixUser
      */
     public function setHomeDir($homeDir)

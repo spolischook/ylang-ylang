@@ -20,7 +20,7 @@ class AdminController extends Controller
     public function indexAction(Request $request)
     {
         $repository = $this->get('app.repository.log');
-        $paginator  = $this->get('knp_paginator');
+        $paginator = $this->get('knp_paginator');
 
         $form = $this->createForm('log_search_type', new LogSearch(), ['method' => 'GET']);
         $form->handleRequest($request);
@@ -39,8 +39,8 @@ class AdminController extends Controller
 
         return $this->render('admin/index.html.twig', [
             'pagination' => $pagination,
-            'form'       => $form->createView(),
-            'logSearch'  => $form->getData(),
+            'form' => $form->createView(),
+            'logSearch' => $form->getData(),
         ]);
     }
 }

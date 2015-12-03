@@ -16,7 +16,7 @@ abstract class AbstractController extends WebTestCase
     protected $client;
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function setUp()
     {
@@ -44,7 +44,7 @@ abstract class AbstractController extends WebTestCase
     /**
      * @param string $path
      * @param string $method
-     * @param int $expectedStatusCode
+     * @param int    $expectedStatusCode
      *
      * @return \Symfony\Component\DomCrawler\Crawler
      */
@@ -65,6 +65,7 @@ abstract class AbstractController extends WebTestCase
     /**
      * @param array $options
      * @param array $server
+     *
      * @return \Symfony\Bundle\FrameworkBundle\Client
      */
     protected function getClient(array $options = array(), array $server = array())
@@ -91,6 +92,7 @@ abstract class AbstractController extends WebTestCase
     /**
      * @param string $username
      * @param string $password
+     *
      * @return \Symfony\Bundle\FrameworkBundle\Client
      */
     protected function logIn($username = 'admin', $password = '111111')

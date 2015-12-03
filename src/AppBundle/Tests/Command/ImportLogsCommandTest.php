@@ -3,8 +3,6 @@
 namespace AppBundle\Tests\Command;
 
 use AppBundle\Command\ImportLogsCommand;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class ImportLogsCommandTest extends \PHPUnit_Framework_TestCase
@@ -73,9 +71,11 @@ class ImportLogsCommandTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param string $name Method name
+     *
      * @return \ReflectionMethod
      */
-    protected static function getMethod($name) {
+    protected static function getMethod($name)
+    {
         $class = new \ReflectionClass('AppBundle\Command\ImportLogsCommand');
         $method = $class->getMethod($name);
         $method->setAccessible(true);
